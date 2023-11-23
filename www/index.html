@@ -45,6 +45,28 @@
         })
     }
 
+    function searchlevelLT() {
+      var level = parseInt($("#level").val());
+      let TestDataClass = ncmb.DataStore(db);
+      TestDataClass
+        .lessThan("level",level)
+        .fetchAll()
+        .then(function(results) {
+          showResults(results);
+        })
+    }
+
+    function searchlevelGT() {
+      var level = parseInt($("#level").val());
+      let TestDataClass = ncmb.DataStore(db);
+      TestDataClass
+        .greaterThan("level",level)
+        .fetchAll()
+        .then(function(results) {
+          showResults(results);
+        })
+    }
+
     function showResults(results) {
       // テーブルのヘッダを生成
       let msg = "<table><tr><th>name</th><th>Lvl</th><th>attack</th><th>defence</th></tr>";
@@ -76,8 +98,10 @@
   </div>
   <div id="button">
     <button class="btn" onclick="fetchAll()">Fetch All</button>
-    <button class="btn" onclick="searchName()">Name</button>
+    <button class="btn" onclick="searchName()">Name</button><br>
+    <button class="btn" onclick="searchlevelLT()">level &lt; </button>
     <button class="btn" onclick="searchlevel()">level</button>
+    <button class="btn" onclick="searchlevelGT()">level &gt; </button>
   </div>
   <div id="message">message area</div>
 </body>
