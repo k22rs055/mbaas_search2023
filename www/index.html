@@ -13,7 +13,7 @@
     // NCMB アクセスの準備
     let ncmb = new NCMB(appKey, clientKey);
     // 本アプリで使うクラスの指定。const は定数の宣言。変更できない変数と思えば良い。
-    const db = "m";
+    const db = "Tanks";
 
     function fetchAll() {
       let TestDataClass = ncmb.DataStore(db);
@@ -24,10 +24,32 @@
     }
 
     function searchName() {
-      let name = $("#name").val();
+      let Name = $("#Name").val();
       let TestDataClass = ncmb.DataStore(db);
       TestDataClass
-        .equalTo("name",name)
+        .regularExpressionTo("Name",Name)
+        .fetchAll()
+        .then(function(results) {
+          showResults(results);
+        })
+    }
+
+    function searchCountry() {
+      let Country = $("#Country").val();
+      let TestDataClass = ncmb.DataStore(db);
+      TestDataClass
+        .equalTo("Country",Country)
+        .fetchAll()
+        .then(function(results) {
+          showResults(results);
+        })
+    }
+
+    function searchType() {
+      let Type = $("#Type").val();
+      let TestDataClass = ncmb.DataStore(db);
+      TestDataClass
+        .regularExpressionTo("Type",Type)
         .fetchAll()
         .then(function(results) {
           showResults(results);
@@ -35,48 +57,25 @@
     }
 
     function searchlevel() {
-      var level = parseInt($("#level").val());
+      var Level = parseInt($("#Level").val());
       let TestDataClass = ncmb.DataStore(db);
       TestDataClass
-        .equalTo("level",level)
+        .equalTo("Level",Level)
         .fetchAll()
         .then(function(results) {
           showResults(results);
         })
     }
-
-    function searchlevelLT() {
-      var level = parseInt($("#level").val());
-      let TestDataClass = ncmb.DataStore(db);
-      TestDataClass
-        .lessThan("level",level)
-        .fetchAll()
-        .then(function(results) {
-          showResults(results);
-        })
-    }
-
-    function searchlevelGT() {
-      var level = parseInt($("#level").val());
-      let TestDataClass = ncmb.DataStore(db);
-      TestDataClass
-        .greaterThan("level",level)
-        .fetchAll()
-        .then(function(results) {
-          showResults(results);
-        })
-    }
-
     function showResults(results) {
       // テーブルのヘッダを生成
-      let msg = "<table><tr><th>name</th><th>Lvl</th><th>attack</th><th>defence</th></tr>";
+      let msg = "<table><tr><th>Country</th><th>Lvl</th><th>Name</th><th>Type</th></tr>";
       for (let i = 0; i < results.length; i++) {
         // 各データを収めた表の列を生成
         msg += "<tr>";
-        msg += "<td>" + results[i].name + "</td>";
-        msg += "<td class='num'>" + results[i].level + "</td>";
-        msg += "<td class='num'>" + results[i].attack + "</td>";
-        msg += "<td class='num'>" + results[i].defence + "</td>";
+        msg += "<td>" + results[i].Country + "</td>";
+        msg += "<td class='num'>" + results[i].Level + "</td>";
+        msg += "<td class='num'>" + results[i].Name + "</td>";
+        msg += "<td class='num'>" + results[i].Type + "</td>";
         msg += "</tr>";
       }
       // テーブルのテイラを生成
@@ -89,19 +88,27 @@
 <body>
   <h1>mBaaS search</h1>
   <div>
-    <label for="name">name:</label>
-    <input id="name" type="text" placeholder="monster name">
+    <label for="Name">Name:</label>
+    <input id="Name" type="text" placeholder="Wat do u want?">
   </div>
   <div>
-    <label for="level">level:</label>
-    <input id="level" type="number" placeholder="monster level">
+    <label for="Level">Level:</label>
+    <input id="Level" type="number" placeholder="Can u counter?">
+  </div>
+  <div>
+    <label for="Country">Country:</label>
+    <input id="Country" type="text" placeholder="Wat Country!">
+  </div>
+    <div>
+    <label for="Type">Type:</label>
+    <input id="Type" type="text" placeholder="Wat Type!">
   </div>
   <div id="button">
     <button class="btn" onclick="fetchAll()">Fetch All</button>
-    <button class="btn" onclick="searchName()">Name</button><br>
-    <button class="btn" onclick="searchlevelLT()">level &lt; </button>
-    <button class="btn" onclick="searchlevel()">level</button>
-    <button class="btn" onclick="searchlevelGT()">level &gt; </button>
+    <button class="btn" onclick="searchName()">Name</button>
+    <button class="btn" onclick="searchlevel()">Level</button>
+    <button class="btn" onclick="searchCountry()">Country</button>
+    <button class="btn" onclick="searchType()">Type</button>
   </div>
   <div id="message">message area</div>
 </body>
